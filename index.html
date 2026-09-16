@@ -11,6 +11,7 @@
     .composer{background:#fff;border:1px solid #e5e5e1;border-radius:18px;padding:14px;box-shadow:0 1px 2px rgba(0,0,0,.03)}
     textarea{width:100%;border:0;resize:vertical;min-height:86px;font:inherit;font-size:16px;outline:none;color:#222}
     button{font:inherit;border:0;cursor:pointer}.primary{width:100%;background:#171717;color:#fff;padding:12px 16px;border-radius:12px;font-weight:650;margin-top:8px}.primary:disabled{opacity:.5}
+    .result{display:none;background:#fff;border:1px solid #dfe6df;border-radius:14px;padding:13px 14px;margin-top:10px;font-size:13px;line-height:1.4}.result.show{display:block}.result-title{font-weight:700;margin-bottom:7px}.result ul{margin:0;padding-left:19px}.result li{margin:4px 0}.result .clarify{color:#8a5a00}.result .noop{color:#666}
     .listhead{display:flex;align-items:center;justify-content:space-between;margin:25px 2px 10px}.listhead h2{font-size:18px;margin:0}.count,.refresh{font-size:13px;color:#777}.refresh{background:transparent}
     .items{display:flex;flex-direction:column;gap:9px}.item{background:#fff;border:1px solid #e5e5e1;border-radius:15px;padding:13px 14px;display:flex;gap:12px;align-items:flex-start}.grow{flex:1;min-width:0}.name{font-weight:700;font-size:15px;margin-bottom:5px}.meta,.price{font-size:13px;color:#64645f;line-height:1.4}.price{color:#262626;margin-top:5px}.date{color:#8a8a84}.actions{display:flex;gap:5px;flex-direction:column}.ghost{background:#f1f1ee;border-radius:9px;padding:7px 9px;font-size:12px;color:#444}.danger{color:#9a3030}.badge{display:inline-block;background:#f2f2ef;border-radius:99px;padding:3px 7px;font-size:11px;margin-top:7px;color:#666}
     .empty{background:#fff;border:1px dashed #d6d6d0;border-radius:14px;padding:28px;text-align:center;color:#777}.hint{font-size:12px;color:#85857f;margin:8px 2px 0}.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#202020;color:#fff;padding:10px 14px;border-radius:10px;font-size:13px;display:none;max-width:90vw;z-index:3}
@@ -24,6 +25,7 @@
   <div class="subrow"><span class="sub">Lista compartida para la próxima compra</span><span id="aistatus" class="ai">modo básico</span></div>
   <div id="setup" class="setup" style="display:none">Falta la clave compartida. Pegala una vez y queda guardada sólo en este dispositivo.<input id="keyinput" placeholder="Clave"><button class="primary" id="savekey">Guardar clave</button></div>
   <div class="composer"><textarea id="input" placeholder="Ej: Falta papel higiénico y avena. Para avena sólo Quaker o Morixe. Cambiá el detergente a Magistral 1,4 L."></textarea><button class="primary" id="apply">Aplicar cambios</button></div>
+  <div id="result" class="result"></div>
   <div class="listhead"><h2>Lista activa</h2><div><span class="count" id="count"></span> <button class="refresh" id="refresh">Actualizar</button></div></div>
   <div class="items" id="items"></div>
   <div class="hint">Podés mandar varias instrucciones juntas. Si un producto ya existe, se deduplica.</div>
@@ -57,15 +59,31 @@ function render(){
 window.prefill=name=>{const i=$('#input');i.value='Cambiá '+name+' a ';i.focus();scrollTo({top:0,behavior:'smooth'})};
 window.removeItem=name=>{const i=$('#input');i.value='Sacá '+name;i.focus();scrollTo({top:0,behavior:'smooth'})};
 function toast(t){const e=$('#toast');e.textContent=t;e.style.display='block';clearTimeout(window.__tt);window.__tt=setTimeout(()=>e.style.display='none',3000)}
+function actionText(x){
+  if(x.type==='added') return 'Agregué '+x.name+(x.detail?' ('+x.detail+')':'')+'.';
+  if(x.type==='removed') return 'Saqué '+x.name+' de la lista.';
+  if(x.type==='changed') return 'Actualicé '+x.name+(x.detail?' ('+x.detail+')':'')+'.';
+  if(x.type==='remembered') return 'Guardé una preferencia para '+x.name+(x.detail?': '+x.detail:'')+'.';
+  if(x.type==='deduped') return x.name+' ya estaba en la lista, así que no lo dupliqué.';
+  if(x.type==='clarify') return 'Necesito aclaración: '+(x.detail||x.name)+'.';
+  if(x.type==='not_found') return 'No encontré '+(x.name||'ese producto')+' en la lista.';
+  return 'No pude confirmar una acción sobre '+(x.name||'la instrucción')+'.';
+}
+function showResult(results,parser){
+  const el=$('#result');
+  if(!results||!results.length){el.innerHTML='<div class="result-title">No hice cambios</div><div class="noop">No interpreté ninguna acción concreta.</div>';el.classList.add('show');return}
+  const items=results.map(x=>'<li class="'+(x.type==='clarify'?'clarify':'')+'">'+esc(actionText(x))+'</li>').join('');
+  el.innerHTML='<div class="result-title">Acciones realizadas</div><ul>'+items+'</ul>';
+  el.classList.add('show');
+}
 async function apply(){
   const raw=$('#input').value.trim();if(!raw||!KEY){if(!KEY)setup();return}
-  const b=$('#apply');b.disabled=true;b.textContent='Aplicando…';
+  const b=$('#apply');b.disabled=true;b.textContent='Aplicando…';$('#result').classList.remove('show');
   try{
     const r=await fetch(API,{method:'POST',headers:{...authHeaders(),'content-type':'application/json'},body:JSON.stringify({action:'input',text:raw})});
     if(r.status===401){authFailed();return}
     const j=await r.json();if(!r.ok)throw new Error(j.error||'Error');$('#input').value='';
-    const msg=(j.results||[]).map(x=>x.type==='deduped'?'Ya estaba: '+x.name:x.type==='added'?'Agregado: '+x.name+(x.detail?' · '+x.detail:''):x.type==='removed'?'Sacado: '+x.name:x.type==='changed'?'Actualizado: '+x.name+(x.detail?' · '+x.detail:''):x.type==='remembered'?'Recordado: '+x.name+(x.detail?' · '+x.detail:''):x.type==='clarify'?'Necesito aclaración: '+(x.detail||x.name):'No encontré: '+(x.name||'')).join(' · ');
-    toast(msg||'Listo');await load()
+    showResult(j.results||[],j.parser);await load()
   }catch(e){toast(e.message||'No pude aplicar el cambio')}finally{b.disabled=false;b.textContent='Aplicar cambios'}
 }
 $('#apply').onclick=apply;$('#refresh').onclick=load;
