@@ -1,28 +1,129 @@
 <!doctype html>
 <html lang="es">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Carrefour casa</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Compritas</title>
 <style>
-:root{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#171717;background:#f6f6f4}*{box-sizing:border-box}body{margin:0}.wrap{max-width:720px;margin:0 auto;padding:22px 16px 80px}h1{font-size:26px;margin:4px 0 5px}.subrow{display:flex;align-items:center;gap:8px;margin:0 0 18px}.sub{color:#6a6a66;font-size:14px}.ai{font-size:11px;padding:3px 7px;border-radius:999px;background:#ecece8;color:#666}.ai.on{background:#e8f3ea;color:#285a31}.composer,.panel{background:#fff;border:1px solid #e5e5e1;border-radius:18px;padding:14px;box-shadow:0 1px 2px rgba(0,0,0,.03)}textarea{width:100%;border:0;resize:vertical;min-height:86px;font:inherit;font-size:16px;outline:none;color:#222}button,input{font:inherit}button{border:0;cursor:pointer}.primary{width:100%;background:#171717;color:#fff;padding:12px 16px;border-radius:12px;font-weight:650;margin-top:8px}.primary:disabled{opacity:.45}.secondary{width:100%;background:#efefeb;color:#222;padding:11px 14px;border-radius:12px;font-weight:600;margin-top:8px}.result{display:none;background:#fff;border:1px solid #dfe6df;border-radius:14px;padding:13px 14px;margin-top:10px;font-size:13px;line-height:1.4}.result.show{display:block}.result-title{font-weight:700;margin-bottom:7px}.result ul{margin:0;padding-left:19px}.result li{margin:4px 0}.result .clarify{color:#8a5a00}.listhead{display:flex;align-items:center;justify-content:space-between;margin:25px 2px 10px}.listhead h2{font-size:18px;margin:0}.count,.refresh{font-size:13px;color:#777}.refresh{background:transparent}.items{display:flex;flex-direction:column;gap:9px}.item{background:#fff;border:1px solid #e5e5e1;border-radius:15px;padding:13px 14px;display:flex;gap:12px;align-items:flex-start}.grow{flex:1;min-width:0}.name{font-weight:700;font-size:15px;margin-bottom:5px}.meta,.price,.small{font-size:13px;color:#64645f;line-height:1.4}.price{color:#262626;margin-top:5px}.date{color:#8a8a84}.actions{display:flex;gap:5px;flex-direction:column}.ghost{background:#f1f1ee;border-radius:9px;padding:7px 9px;font-size:12px;color:#444}.danger{color:#9a3030}.badge{display:inline-block;background:#f2f2ef;border-radius:99px;padding:3px 7px;font-size:11px;margin-top:7px;color:#666}.empty{background:#fff;border:1px dashed #d6d6d0;border-radius:14px;padding:28px;text-align:center;color:#777}.hint{font-size:12px;color:#85857f;margin:8px 2px 0}.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#202020;color:#fff;padding:10px 14px;border-radius:10px;font-size:13px;display:none;max-width:90vw;z-index:5}.setup{background:#fff7db;border:1px solid #ead99a;border-radius:14px;padding:14px;font-size:14px;margin-bottom:14px}.setup input{width:100%;margin-top:8px;padding:10px;border:1px solid #ccc;border-radius:9px}.shopbar{margin-top:16px}.execution{display:none;background:#eef5ef;border:1px solid #d7e7d9;border-radius:14px;padding:14px;margin-top:14px}.execution.show{display:block}.execution h2{font-size:18px;margin:0 0 6px}.promptbox{display:none;margin-top:10px;background:#fff;border:1px solid #ddd;border-radius:10px;padding:10px;font-size:12px;min-height:180px;white-space:pre-wrap}.inlineLink{display:inline-block;margin-top:10px;color:#333;font-size:13px}@media(min-width:640px){.wrap{padding-top:36px}.item{padding:15px 16px}}
+:root{
+  --ink:#111;
+  --paper:#fff8e8;
+  --pink:#ff9fcb;
+  --yellow:#ffd93d;
+  --blue:#63c5ff;
+  --green:#9df3a7;
+  --coral:#ff7b84;
+  --white:#fffdf7;
+  --muted:#5d5a54;
+  --shadow:5px 5px 0 var(--ink);
+  --border:3px solid var(--ink);
+  font-family:Arial,Helvetica,sans-serif;
+  color:var(--ink);
+  background:var(--paper);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper)}
+button,input,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+.wrap{max-width:760px;margin:0 auto;padding:18px 14px 72px}
+.hero{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;margin:2px 0 18px}
+.hero h1{font-family:"Arial Black",Impact,sans-serif;font-size:clamp(38px,9vw,72px);line-height:.92;letter-spacing:-2px;margin:0}
+.hero img{display:block;width:min(42vw,260px);height:auto;image-rendering:pixelated;image-rendering:crisp-edges;flex:none}
+.setup,.composer,.result,.execution,.listbox{border:var(--border);box-shadow:var(--shadow);background:var(--white)}
+.setup{background:var(--yellow);padding:14px;margin-bottom:16px;font-weight:800}
+.setup input{display:block;width:100%;margin-top:10px;padding:12px;border:var(--border);background:#fff}
+.composer{background:var(--pink);padding:16px}
+.composer textarea{width:100%;min-height:98px;resize:vertical;border:var(--border);background:#fff;padding:14px;font-size:17px;outline:none;box-shadow:3px 3px 0 rgba(17,17,17,.18)}
+.primary,.secondary,.refresh,.ghost{border:var(--border);font-weight:900;box-shadow:3px 3px 0 var(--ink);transition:transform .08s ease,box-shadow .08s ease}
+.primary:active,.secondary:active,.refresh:active,.ghost:active{transform:translate(3px,3px);box-shadow:0 0 0 var(--ink)}
+.primary:disabled,.secondary:disabled,.refresh:disabled,.ghost:disabled{opacity:.45;cursor:default;transform:none}
+.primary{width:100%;padding:13px 16px;background:var(--yellow);margin-top:12px;font-size:16px}
+.secondary{width:100%;padding:11px 14px;background:#fff;margin-top:10px}
+.result{display:none;margin-top:16px;padding:14px;background:#fff}
+.result.show{display:block}
+.result-title{font-family:"Arial Black",Impact,sans-serif;font-size:16px;margin-bottom:7px}
+.result ul{margin:0;padding-left:20px}
+.result li{margin:5px 0}
+.result .clarify{color:#8a4b00}
+.shopbar{margin:18px 0}
+#startShop{background:var(--blue);font-size:18px}
+.listbox{margin-top:18px;overflow:hidden}
+.listhead{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--green);padding:14px;border-bottom:var(--border)}
+.listtitle{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.listhead h2{font-family:"Arial Black",Impact,sans-serif;font-size:26px;line-height:1;margin:0}
+.count{display:inline-block;background:var(--pink);border:2px solid var(--ink);padding:5px 9px;font-family:"Courier New",monospace;font-weight:700}
+.refresh{background:#fff;padding:8px 10px}
+.items{display:flex;flex-direction:column;background:#fff}
+.item{display:flex;align-items:flex-start;gap:12px;padding:14px;border-bottom:2px solid var(--ink);background:var(--white)}
+.item:last-child{border-bottom:0}
+.grow{flex:1;min-width:0}
+.name{font-family:"Arial Black",Impact,sans-serif;font-size:16px;line-height:1.15;margin-bottom:6px}
+.meta,.price,.small{font-size:13px;line-height:1.4;color:var(--muted)}
+.price{margin-top:4px;color:var(--ink)}
+.date{color:#777}
+.actions{display:flex;gap:7px;flex-direction:column;flex:none}
+.ghost{padding:8px 10px;background:var(--blue);font-size:12px}
+.ghost.danger{background:var(--coral);color:var(--ink)}
+.badge{display:inline-block;margin-top:7px;padding:4px 7px;background:var(--yellow);border:2px solid var(--ink);font-size:11px;font-family:"Courier New",monospace;font-weight:700}
+.empty{padding:28px;text-align:center;font-weight:800;background:#fff}
+.hint{font-family:"Courier New",monospace;font-size:12px;color:var(--muted);margin:10px 2px 0}
+.execution{display:none;background:var(--green);padding:14px;margin-top:18px}
+.execution.show{display:block}
+.execution h2{font-family:"Arial Black",Impact,sans-serif;margin:0 0 6px;font-size:22px}
+.promptbox{display:none;margin-top:10px;background:#fff;border:var(--border);padding:10px;font-size:12px;min-height:180px;white-space:pre-wrap;overflow:auto}
+.inlineLink{display:inline-block;margin-top:12px;color:var(--ink);font-weight:900;text-decoration:underline}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:11px 14px;border:3px solid #fff;box-shadow:4px 4px 0 rgba(0,0,0,.3);font-weight:800;display:none;max-width:90vw;z-index:10}
+@media(max-width:560px){
+  .wrap{padding-top:14px}
+  .hero{align-items:center;gap:8px}
+  .hero h1{font-size:43px;letter-spacing:-1.5px}
+  .hero img{width:47vw;max-width:205px}
+  .composer{padding:12px}
+  .listhead{align-items:center}
+  .listhead h2{font-size:22px}
+  .item{padding:12px 10px}
+  .actions{gap:6px}
+  .ghost{padding:7px 8px}
+}
 </style>
 </head>
-<body><div class="wrap">
-<h1>Carrefour casa</h1><div class="subrow"><span class="sub">Lista compartida para la próxima compra</span><span id="aistatus" class="ai">modo básico</span></div>
-<div id="setup" class="setup" style="display:none">Falta la clave compartida. Pegala una vez y queda guardada sólo en este dispositivo.<input id="keyinput" placeholder="Clave"><button class="primary" id="savekey">Guardar clave</button></div>
-<div class="composer"><textarea id="input" placeholder="Ej: Falta papel higiénico y avena. Para avena sólo Quaker o Morixe. Cambiá el detergente a Magistral 1,4 L."></textarea><button class="primary" id="apply">Aplicar cambios</button></div>
-<div id="result" class="result"></div>
-<div class="listhead"><h2>Lista activa</h2><div><span class="count" id="count"></span> <button class="refresh" id="refresh">Actualizar</button></div></div>
-<div class="items" id="items"></div><div class="hint">Podés mandar varias instrucciones juntas. Si un producto ya existe, se deduplica.</div>
-<div class="shopbar"><button id="startShop" class="primary">Preparar compra en Carrefour</button></div>
-<div id="execution" class="execution"><h2>Compra preparada</h2><div id="executionSub" class="small"></div><button id="copyPrompt" class="primary">Copiar instrucciones para ChatGPT</button><button id="togglePrompt" class="secondary">Ver instrucciones</button><pre id="promptBox" class="promptbox"></pre><a class="inlineLink" href="https://www.carrefour.com.ar/" target="_blank" rel="noopener">Abrir Carrefour</a></div>
-</div><div class="toast" id="toast"></div>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <h1>Compritas</h1>
+    <img alt="Familia de compras en pixel art" src="data:image/png;base64,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">
+  </header>
+
+  <div id="setup" class="setup" style="display:none">Falta la clave compartida. Pegala una vez y queda guardada sólo en este dispositivo.<input id="keyinput" placeholder="Clave"><button class="primary" id="savekey">Guardar clave</button></div>
+
+  <div class="composer">
+    <textarea id="input" placeholder="Ej: Falta papel higiénico y avena. Para avena sólo Quaker o Morixe. Cambiá el detergente a Magistral 1,4 L."></textarea>
+    <button class="primary" id="apply">Aplicar cambios</button>
+  </div>
+
+  <div id="result" class="result"></div>
+
+  <div class="shopbar"><button id="startShop" class="primary">Preparar compra en Carrefour</button></div>
+
+  <section class="listbox">
+    <div class="listhead">
+      <div class="listtitle"><h2>Lista activa</h2><span class="count" id="count"></span></div>
+      <button class="refresh" id="refresh">Actualizar</button>
+    </div>
+    <div class="items" id="items"></div>
+  </section>
+  <div class="hint">Podés mandar varias instrucciones juntas. Si un producto ya existe, se deduplica.</div>
+
+  <div id="execution" class="execution"><h2>Compra preparada</h2><div id="executionSub" class="small"></div><button id="copyPrompt" class="primary">Copiar instrucciones para ChatGPT</button><button id="togglePrompt" class="secondary">Ver instrucciones</button><pre id="promptBox" class="promptbox"></pre><a class="inlineLink" href="https://www.carrefour.com.ar/" target="_blank" rel="noopener">Abrir Carrefour</a></div>
+</div>
+<div class="toast" id="toast"></div>
+
 <script>
 const API='https://dspzighhijupnrfxvcwr.supabase.co/functions/v1/carrefour-casa-v2';const qs=new URLSearchParams(location.search);let KEY=qs.get('key')||localStorage.getItem('carrefourHouseholdKey')||'';if(qs.get('key')){localStorage.setItem('carrefourHouseholdKey',qs.get('key'));const clean=new URL(location.href);clean.searchParams.delete('key');history.replaceState({},'',clean.pathname+(clean.search||'')+clean.hash)}
 const $=s=>document.querySelector(s);let rows=[],currentPrompt='';const authHeaders=()=>KEY?{'x-household-key':KEY}:{};
 function fmt(n){return n==null?'':new Intl.NumberFormat('es-AR',{style:'currency',currency:'ARS',maximumFractionDigits:0}).format(Number(n))}function dateFmt(s){if(!s)return'';const[y,m,d]=s.split('-');return d+'/'+m+'/'+y.slice(2)}function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}function setup(){if(!KEY)$('#setup').style.display='block'}function authFailed(){KEY='';localStorage.removeItem('carrefourHouseholdKey');$('#setup').style.display='block';$('#items').innerHTML='<div class="empty">Ingresá la clave compartida para ver la lista.</div>'}
 async function apiGet(q){const r=await fetch(API+q,{headers:authHeaders()});if(r.status===401){authFailed();throw new Error('Acceso no autorizado')}const j=await r.json();if(!r.ok)throw new Error(j.error||'Error');return j}async function apiPost(body){const r=await fetch(API,{method:'POST',headers:{...authHeaders(),'content-type':'application/json'},body:JSON.stringify(body)});if(r.status===401){authFailed();throw new Error('Acceso no autorizado')}const j=await r.json();if(!r.ok)throw new Error(j.error||'Error');return j}
-async function loadStatus(){if(!KEY)return;try{const j=await apiGet('?api=status');const e=$('#aistatus');if(j.ai_enabled){e.textContent='IA activa';e.classList.add('on')}else{e.textContent='modo básico';e.classList.remove('on')}}catch(_){}}
-async function load(){if(!KEY){setup();return}try{const j=await apiGet('');rows=j.items||[];render();await loadStatus()}catch(e){$('#items').innerHTML='<div class="empty">No pude cargar la lista.</div>'}}
+async function load(){if(!KEY){setup();return}try{const j=await apiGet('');rows=j.items||[];render()}catch(e){$('#items').innerHTML='<div class="empty">No pude cargar la lista.</div>'}}
 function render(){$('#count').textContent=rows.length+' productos';const el=$('#items');if(!rows.length){el.innerHTML='<div class="empty">La lista está vacía.</div>';return}el.innerHTML=rows.map(x=>{const qty=Number(x.requested_quantity||1),detail=[x.brand,x.variant,x.size_text,qty!==1?'cantidad '+qty:null].filter(Boolean).join(' · ');return '<div class="item"><div class="grow"><div class="name">'+esc(x.canonical_name)+'</div><div class="meta">'+esc(detail||'Sin detalles registrados')+'</div><div class="price">'+(x.last_price?fmt(x.last_price):'Sin precio registrado')+(x.last_price_date?' <span class="date">· '+dateFmt(x.last_price_date)+'</span>':'')+'</div>'+(x.stockable?'<span class="badge">se puede stockear</span>':'')+'</div><div class="actions"><button class="ghost" onclick="prefill(\''+String(x.canonical_name).replace(/'/g,"\\'")+'\')">Cambiar</button><button class="ghost danger" onclick="removeItemNow(\''+String(x.canonical_name).replace(/'/g,"\\'")+'\',this)">Sacar</button></div></div>'}).join('')}
 window.prefill=name=>{const i=$('#input');i.value='Cambiá '+name+' a ';i.focus();scrollTo({top:0,behavior:'smooth'})};function toast(t){const e=$('#toast');e.textContent=t;e.style.display='block';clearTimeout(window.__tt);window.__tt=setTimeout(()=>e.style.display='none',3000)}
 function actionText(x){if(x.type==='added')return'Agregué '+x.name+(x.detail?' ('+x.detail+')':'')+'.';if(x.type==='removed')return'Saqué '+x.name+' de la lista.';if(x.type==='changed')return'Actualicé '+x.name+(x.detail?' ('+x.detail+')':'')+'.';if(x.type==='remembered')return'Guardé una preferencia para '+x.name+(x.detail?': '+x.detail:'')+'.';if(x.type==='deduped')return x.name+' ya estaba en la lista, así que no lo dupliqué.';if(x.type==='clarify')return'Necesito aclaración: '+(x.detail||x.name)+'.';if(x.type==='not_found')return'No encontré '+(x.name||'ese producto')+' en la lista.';return'No pude confirmar una acción sobre '+(x.name||'la instrucción')+'.'}
@@ -32,4 +133,5 @@ window.removeItemNow=async(name,button)=>{button.disabled=true;try{const j=await
 async function prepareShopping(){if(!rows.length){toast('La lista está vacía');return}const b=$('#startShop');b.disabled=true;b.textContent='Preparando…';$('#execution').classList.remove('show');try{const s=await apiPost({action:'session_start',force:true});const shopping=s.shopping;if(!shopping?.session?.id)throw new Error('No pude crear la compra');const pending=(shopping.items||[]).filter(x=>x.decision==='pending');await Promise.all(pending.map(x=>apiPost({action:'session_item',session_id:shopping.session.id,item_id:x.id,decision:'approved',substitution_policy:'best_allowed',selected_quantity:Number(x.selected_quantity||1),stock_up:Boolean(x.snapshot_stockable)})));await apiPost({action:'session_approve',session_id:shopping.session.id});const m=await apiGet('?api=manifest&session_id='+encodeURIComponent(shopping.session.id));currentPrompt=m.prompt||'';$('#executionSub').textContent=(m.manifest||[]).length+' productos listos para pasar a Carrefour. Las sustituciones se resolverán dinámicamente según las reglas guardadas.';$('#promptBox').textContent=currentPrompt;$('#execution').classList.add('show');scrollTo({top:document.body.scrollHeight,behavior:'smooth'})}catch(e){toast(e.message||'No pude preparar la compra')}finally{b.disabled=false;b.textContent='Preparar compra en Carrefour'}}
 $('#apply').onclick=apply;$('#refresh').onclick=load;$('#startShop').onclick=prepareShopping;$('#savekey').onclick=()=>{KEY=$('#keyinput').value.trim();if(KEY){localStorage.setItem('carrefourHouseholdKey',KEY);$('#setup').style.display='none';load()}};$('#copyPrompt').onclick=async()=>{if(!currentPrompt)return;try{await navigator.clipboard.writeText(currentPrompt);toast('Instrucciones copiadas')}catch(_){toast('No pude copiar automáticamente')}};$('#togglePrompt').onclick=()=>{const p=$('#promptBox');const show=p.style.display!=='block';p.style.display=show?'block':'none';$('#togglePrompt').textContent=show?'Ocultar instrucciones':'Ver instrucciones'};$('#input').addEventListener('keydown',e=>{if((e.metaKey||e.ctrlKey)&&e.key==='Enter')apply()});setup();load();setInterval(load,15000);
 </script>
-</body></html>
+</body>
+</html>
