@@ -62,7 +62,7 @@ const API='https://dspzighhijupnrfxvcwr.supabase.co/functions/v1/carrefour-casa-
 const qs=new URLSearchParams(location.search);
 let KEY=qs.get('key')||localStorage.getItem('carrefourHouseholdKey')||'';
 if(qs.get('key')){localStorage.setItem('carrefourHouseholdKey',qs.get('key'));const clean=new URL(location.href);clean.searchParams.delete('key');history.replaceState({},'',clean.pathname+(clean.search||'')+clean.hash)}
-const $=s=>document.querySelector(s);let rows=[],currentPrompt='';
+const $=s=>document.querySelector(s);let rows=[],currentPrompt='',clearing=false;
 const authHeaders=()=>KEY?{'x-household-key':KEY}:{};
 function fmt(n){return n==null?'':new Intl.NumberFormat('es-AR',{style:'currency',currency:'ARS',maximumFractionDigits:0}).format(Number(n))}
 function dateFmt(s){if(!s)return'';const[y,m,d]=s.split('-');return d+'/'+m+'/'+y.slice(2)}
@@ -71,7 +71,7 @@ function setup(){if(!KEY)$('#setup').style.display='block'}
 function authFailed(){KEY='';rows=[];localStorage.removeItem('carrefourHouseholdKey');$('#setup').style.display='block';$('#clearList').disabled=true;$('#items').innerHTML='<div class="empty">Ingresá la clave compartida para ver la lista.</div>'}
 async function apiGet(q){const r=await fetch(API+q,{headers:authHeaders()});if(r.status===401){authFailed();throw new Error('Acceso no autorizado')}const j=await r.json();if(!r.ok)throw new Error(j.error||'Error');return j}
 async function apiPost(body){const r=await fetch(API,{method:'POST',headers:{...authHeaders(),'content-type':'application/json'},body:JSON.stringify(body)});if(r.status===401){authFailed();throw new Error('Acceso no autorizado')}const j=await r.json();if(!r.ok)throw new Error(j.error||'Error');return j}
-async function load(){if(!KEY){setup();return}try{const j=await apiGet('');rows=j.items||[];render()}catch(e){$('#items').innerHTML='<div class="empty">No pude cargar la lista.</div>'}}
+async function load(){if(clearing)return;if(!KEY){setup();return}try{const j=await apiGet('');rows=j.items||[];render()}catch(e){$('#items').innerHTML='<div class="empty">No pude cargar la lista.</div>'}}
 function render(){
   $('#count').textContent=rows.length+' productos';$('#clearList').disabled=!rows.length;const el=$('#items');
   if(!rows.length){el.innerHTML='<div class="empty">La lista está vacía.</div>';return}
@@ -85,15 +85,14 @@ async function apply(){const raw=$('#input').value.trim();if(!raw||!KEY){if(!KEY
 window.removeItemNow=async(name,button)=>{button.disabled=true;try{const j=await apiPost({action:'input',text:'Sacá '+name});showResult(j.results||[]);await load()}catch(e){toast(e.message||'No pude sacar el producto')}finally{button.disabled=false}};
 async function clearList(){
   if(!rows.length)return;
-  const items=[...rows];
-  if(!confirm('¿Vaciar la lista? Se eliminarán '+items.length+' productos.'))return;
-  const b=$('#clearList');b.disabled=true;b.textContent='Vaciando…';
-  const results=[];
+  const previous=rows;
+  if(!confirm('¿Vaciar la lista? Se eliminarán '+previous.length+' productos.'))return;
+  const b=$('#clearList');clearing=true;b.disabled=true;b.textContent='Vaciando…';
+  rows=[];render();$('#result').classList.remove('show');
   try{
-    for(const item of items){const j=await apiPost({action:'input',text:'Sacá '+item.canonical_name});results.push(...(j.results||[]))}
-    showResult(results);await load();toast('Lista vaciada');
-  }catch(e){await load();toast(e.message||'No pude vaciar toda la lista')}
-  finally{b.textContent='Vaciar lista';b.disabled=!rows.length}
+    await apiPost({action:'clear_list'});toast('Lista vaciada');
+  }catch(e){rows=previous;render();toast(e.message||'No pude vaciar la lista')}
+  finally{clearing=false;b.textContent='Vaciar lista';b.disabled=!rows.length}
 }
 async function prepareShopping(){if(!rows.length){toast('La lista está vacía');return}const b=$('#startShop');b.disabled=true;b.textContent='Preparando…';$('#execution').classList.remove('show');try{const s=await apiPost({action:'session_start',force:true});const shopping=s.shopping;if(!shopping?.session?.id)throw new Error('No pude crear la compra');const pending=(shopping.items||[]).filter(x=>x.decision==='pending');await Promise.all(pending.map(x=>apiPost({action:'session_item',session_id:shopping.session.id,item_id:x.id,decision:'approved',substitution_policy:'best_allowed',selected_quantity:Number(x.selected_quantity||1),stock_up:Boolean(x.snapshot_stockable)})));await apiPost({action:'session_approve',session_id:shopping.session.id});const m=await apiGet('?api=manifest&session_id='+encodeURIComponent(shopping.session.id));currentPrompt=m.prompt||'';$('#executionSub').textContent=(m.manifest||[]).length+' productos listos para pasar a Carrefour. Las sustituciones se resolverán dinámicamente según las reglas guardadas.';$('#promptBox').textContent=currentPrompt;$('#execution').classList.add('show');scrollTo({top:document.body.scrollHeight,behavior:'smooth'})}catch(e){toast(e.message||'No pude preparar la compra')}finally{b.disabled=false;b.textContent='Preparar compra en Carrefour'}}
 $('#apply').onclick=apply;$('#refresh').onclick=load;$('#clearList').onclick=clearList;$('#startShop').onclick=prepareShopping;
