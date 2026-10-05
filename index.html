@@ -18,16 +18,16 @@
 .setup,.composer,.result,.execution,.listbox{border:var(--border);box-shadow:var(--shadow);background:var(--white)}
 .setup{background:var(--yellow);padding:14px;margin-bottom:16px;font-weight:800}.setup input{display:block;width:100%;margin-top:10px;padding:12px;border:var(--border);background:#fff}
 .composer{background:var(--pink);padding:16px}.composer textarea{width:100%;min-height:98px;resize:vertical;border:var(--border);background:#fff;padding:14px;font-size:17px;outline:none;box-shadow:3px 3px 0 rgba(17,17,17,.18)}
-.primary,.secondary,.refresh,.ghost{border:var(--border);font-weight:900;box-shadow:3px 3px 0 var(--ink);transition:transform .08s ease,box-shadow .08s ease}
-.primary:active,.secondary:active,.refresh:active,.ghost:active{transform:translate(3px,3px);box-shadow:0 0 0 var(--ink)}
-.primary:disabled,.secondary:disabled,.refresh:disabled,.ghost:disabled{opacity:.45;cursor:default;transform:none}
+.primary,.secondary,.refresh,.clear-list,.ghost{border:var(--border);font-weight:900;box-shadow:3px 3px 0 var(--ink);transition:transform .08s ease,box-shadow .08s ease}
+.primary:active,.secondary:active,.refresh:active,.clear-list:active,.ghost:active{transform:translate(3px,3px);box-shadow:0 0 0 var(--ink)}
+.primary:disabled,.secondary:disabled,.refresh:disabled,.clear-list:disabled,.ghost:disabled{opacity:.45;cursor:default;transform:none}
 .primary{width:100%;padding:13px 16px;background:var(--yellow);margin-top:12px;font-size:16px}.secondary{width:100%;padding:11px 14px;background:#fff;margin-top:10px}
 .result{display:none;margin-top:16px;padding:14px;background:#fff}.result.show{display:block}.result-title{font-family:"Arial Black",Impact,sans-serif;font-size:16px;margin-bottom:7px}.result ul{margin:0;padding-left:20px}.result li{margin:5px 0}.result .clarify{color:#8a4b00}
 .shopbar{margin:18px 0}#startShop{background:var(--blue);font-size:18px}
-.listbox{margin-top:18px;overflow:hidden}.listhead{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--green);padding:14px;border-bottom:var(--border)}.listtitle{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.listhead h2{font-family:"Arial Black",Impact,sans-serif;font-size:26px;line-height:1;margin:0}.count{display:inline-block;background:var(--pink);border:2px solid var(--ink);padding:5px 9px;font-family:"Courier New",monospace;font-weight:700}.refresh{background:#fff;padding:8px 10px}
+.listbox{margin-top:18px;overflow:hidden}.listhead{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--green);padding:14px;border-bottom:var(--border)}.listtitle{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.listhead h2{font-family:"Arial Black",Impact,sans-serif;font-size:26px;line-height:1;margin:0}.count{display:inline-block;background:var(--pink);border:2px solid var(--ink);padding:5px 9px;font-family:"Courier New",monospace;font-weight:700}.listtools{display:flex;align-items:center;gap:9px;flex-wrap:wrap;justify-content:flex-end}.refresh,.clear-list{padding:8px 10px}.refresh{background:#fff}.clear-list{background:var(--coral)}
 .items{display:flex;flex-direction:column;background:#fff}.item{display:flex;align-items:flex-start;gap:12px;padding:14px;border-bottom:2px solid var(--ink);background:var(--white)}.item:last-child{border-bottom:0}.grow{flex:1;min-width:0}.name{font-family:"Arial Black",Impact,sans-serif;font-size:16px;line-height:1.15;margin-bottom:6px}.meta,.price,.small{font-size:13px;line-height:1.4;color:var(--muted)}.price{margin-top:4px;color:var(--ink)}.date{color:#777}.actions{display:flex;gap:7px;flex-direction:column;flex:none}.ghost{padding:8px 10px;background:var(--blue);font-size:12px}.ghost.danger{background:var(--coral);color:var(--ink)}.badge{display:inline-block;margin-top:7px;padding:4px 7px;background:var(--yellow);border:2px solid var(--ink);font-size:11px;font-family:"Courier New",monospace;font-weight:700}.empty{padding:28px;text-align:center;font-weight:800;background:#fff}.hint{font-family:"Courier New",monospace;font-size:12px;color:var(--muted);margin:10px 2px 0}
 .execution{display:none;background:var(--green);padding:14px;margin-top:18px}.execution.show{display:block}.execution h2{font-family:"Arial Black",Impact,sans-serif;margin:0 0 6px;font-size:22px}.promptbox{display:none;margin-top:10px;background:#fff;border:var(--border);padding:10px;font-size:12px;min-height:180px;white-space:pre-wrap;overflow:auto}.inlineLink{display:inline-block;margin-top:12px;color:var(--ink);font-weight:900;text-decoration:underline}.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:11px 14px;border:3px solid #fff;box-shadow:4px 4px 0 rgba(0,0,0,.3);font-weight:800;display:none;max-width:90vw;z-index:10}
-@media(max-width:560px){.wrap{padding-top:14px}.hero{align-items:center;gap:8px;min-height:90px}.hero h1{font-size:43px;letter-spacing:-1.5px}.hero img{width:48vw;max-width:215px}.composer{padding:12px}.listhead h2{font-size:22px}.item{padding:12px 10px}.actions{gap:6px}.ghost{padding:7px 8px}}
+@media(max-width:560px){.wrap{padding-top:14px}.hero{align-items:center;gap:8px;min-height:90px}.hero h1{font-size:43px;letter-spacing:-1.5px}.hero img{width:48vw;max-width:215px}.composer{padding:12px}.listhead{align-items:flex-start;flex-direction:column}.listhead h2{font-size:22px}.listtools{width:100%;justify-content:stretch}.listtools button{flex:1}.item{padding:12px 10px}.actions{gap:6px}.ghost{padding:7px 8px}}
 </style>
 </head>
 <body>
@@ -48,7 +48,7 @@
   <div class="shopbar"><button id="startShop" class="primary">Preparar compra en Carrefour</button></div>
 
   <section class="listbox">
-    <div class="listhead"><div class="listtitle"><h2>Lista activa</h2><span class="count" id="count"></span></div><button class="refresh" id="refresh">Actualizar</button></div>
+    <div class="listhead"><div class="listtitle"><h2>Lista activa</h2><span class="count" id="count"></span></div><div class="listtools"><button class="clear-list" id="clearList" disabled>Vaciar lista</button><button class="refresh" id="refresh">Actualizar</button></div></div>
     <div class="items" id="items"></div>
   </section>
   <div class="hint">Podés mandar varias instrucciones juntas. Si un producto ya existe, se deduplica.</div>
@@ -68,12 +68,12 @@ function fmt(n){return n==null?'':new Intl.NumberFormat('es-AR',{style:'currency
 function dateFmt(s){if(!s)return'';const[y,m,d]=s.split('-');return d+'/'+m+'/'+y.slice(2)}
 function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
 function setup(){if(!KEY)$('#setup').style.display='block'}
-function authFailed(){KEY='';localStorage.removeItem('carrefourHouseholdKey');$('#setup').style.display='block';$('#items').innerHTML='<div class="empty">Ingresá la clave compartida para ver la lista.</div>'}
+function authFailed(){KEY='';rows=[];localStorage.removeItem('carrefourHouseholdKey');$('#setup').style.display='block';$('#clearList').disabled=true;$('#items').innerHTML='<div class="empty">Ingresá la clave compartida para ver la lista.</div>'}
 async function apiGet(q){const r=await fetch(API+q,{headers:authHeaders()});if(r.status===401){authFailed();throw new Error('Acceso no autorizado')}const j=await r.json();if(!r.ok)throw new Error(j.error||'Error');return j}
 async function apiPost(body){const r=await fetch(API,{method:'POST',headers:{...authHeaders(),'content-type':'application/json'},body:JSON.stringify(body)});if(r.status===401){authFailed();throw new Error('Acceso no autorizado')}const j=await r.json();if(!r.ok)throw new Error(j.error||'Error');return j}
 async function load(){if(!KEY){setup();return}try{const j=await apiGet('');rows=j.items||[];render()}catch(e){$('#items').innerHTML='<div class="empty">No pude cargar la lista.</div>'}}
 function render(){
-  $('#count').textContent=rows.length+' productos';const el=$('#items');
+  $('#count').textContent=rows.length+' productos';$('#clearList').disabled=!rows.length;const el=$('#items');
   if(!rows.length){el.innerHTML='<div class="empty">La lista está vacía.</div>';return}
   el.innerHTML=rows.map(x=>{const qty=Number(x.requested_quantity||1);const detail=[x.brand,x.variant,x.size_text,qty!==1?'cantidad '+qty:null].filter(Boolean).join(' · ');const safe=String(x.canonical_name).replace(/'/g,"\\'");return '<div class="item"><div class="grow"><div class="name">'+esc(x.canonical_name)+'</div><div class="meta">'+esc(detail||'Sin detalles registrados')+'</div><div class="price">'+(x.last_price?fmt(x.last_price):'Sin precio registrado')+(x.last_price_date?' <span class="date">· '+dateFmt(x.last_price_date)+'</span>':'')+'</div>'+(x.stockable?'<span class="badge">se puede stockear</span>':'')+'</div><div class="actions"><button class="ghost" onclick="prefill(\''+safe+'\')">Cambiar</button><button class="ghost danger" onclick="removeItemNow(\''+safe+'\',this)">Sacar</button></div></div>'}).join('')
 }
@@ -83,8 +83,20 @@ function actionText(x){if(x.type==='added')return'Agregué '+x.name+(x.detail?' 
 function showResult(results){const el=$('#result');if(!results||!results.length){el.innerHTML='<div class="result-title">No hice cambios</div>';el.classList.add('show');return}el.innerHTML='<div class="result-title">Acciones realizadas</div><ul>'+results.map(x=>'<li class="'+(x.type==='clarify'?'clarify':'')+'">'+esc(actionText(x))+'</li>').join('')+'</ul>';el.classList.add('show')}
 async function apply(){const raw=$('#input').value.trim();if(!raw||!KEY){if(!KEY)setup();return}const b=$('#apply');b.disabled=true;b.textContent='Aplicando…';$('#result').classList.remove('show');try{const j=await apiPost({action:'input',text:raw});$('#input').value='';showResult(j.results||[]);await load()}catch(e){toast(e.message||'No pude aplicar el cambio')}finally{b.disabled=false;b.textContent='Aplicar cambios'}}
 window.removeItemNow=async(name,button)=>{button.disabled=true;try{const j=await apiPost({action:'input',text:'Sacá '+name});showResult(j.results||[]);await load()}catch(e){toast(e.message||'No pude sacar el producto')}finally{button.disabled=false}};
+async function clearList(){
+  if(!rows.length)return;
+  const items=[...rows];
+  if(!confirm('¿Vaciar la lista? Se eliminarán '+items.length+' productos.'))return;
+  const b=$('#clearList');b.disabled=true;b.textContent='Vaciando…';
+  const results=[];
+  try{
+    for(const item of items){const j=await apiPost({action:'input',text:'Sacá '+item.canonical_name});results.push(...(j.results||[]))}
+    showResult(results);await load();toast('Lista vaciada');
+  }catch(e){await load();toast(e.message||'No pude vaciar toda la lista')}
+  finally{b.textContent='Vaciar lista';b.disabled=!rows.length}
+}
 async function prepareShopping(){if(!rows.length){toast('La lista está vacía');return}const b=$('#startShop');b.disabled=true;b.textContent='Preparando…';$('#execution').classList.remove('show');try{const s=await apiPost({action:'session_start',force:true});const shopping=s.shopping;if(!shopping?.session?.id)throw new Error('No pude crear la compra');const pending=(shopping.items||[]).filter(x=>x.decision==='pending');await Promise.all(pending.map(x=>apiPost({action:'session_item',session_id:shopping.session.id,item_id:x.id,decision:'approved',substitution_policy:'best_allowed',selected_quantity:Number(x.selected_quantity||1),stock_up:Boolean(x.snapshot_stockable)})));await apiPost({action:'session_approve',session_id:shopping.session.id});const m=await apiGet('?api=manifest&session_id='+encodeURIComponent(shopping.session.id));currentPrompt=m.prompt||'';$('#executionSub').textContent=(m.manifest||[]).length+' productos listos para pasar a Carrefour. Las sustituciones se resolverán dinámicamente según las reglas guardadas.';$('#promptBox').textContent=currentPrompt;$('#execution').classList.add('show');scrollTo({top:document.body.scrollHeight,behavior:'smooth'})}catch(e){toast(e.message||'No pude preparar la compra')}finally{b.disabled=false;b.textContent='Preparar compra en Carrefour'}}
-$('#apply').onclick=apply;$('#refresh').onclick=load;$('#startShop').onclick=prepareShopping;
+$('#apply').onclick=apply;$('#refresh').onclick=load;$('#clearList').onclick=clearList;$('#startShop').onclick=prepareShopping;
 $('#savekey').onclick=()=>{KEY=$('#keyinput').value.trim();if(KEY){localStorage.setItem('carrefourHouseholdKey',KEY);$('#setup').style.display='none';load()}};
 $('#copyPrompt').onclick=async()=>{if(!currentPrompt)return;try{await navigator.clipboard.writeText(currentPrompt);toast('Instrucciones copiadas')}catch(_){toast('No pude copiar automáticamente')}};
 $('#togglePrompt').onclick=()=>{const p=$('#promptBox');const show=p.style.display!=='block';p.style.display=show?'block':'none';$('#togglePrompt').textContent=show?'Ocultar instrucciones':'Ver instrucciones'};
